@@ -1,6 +1,5 @@
 ﻿namespace Csharp_DI_Denis_Panjuta_TY;
 
-
 public class Hammer
 {
     public void Use() 
@@ -19,22 +18,16 @@ public class Saw
 
 public class Builder
 {
-    private Hammer _hammer;
-    private Saw _saw;
-
-    public Builder(Hammer hammer, Saw saw)
-    {
-        _hammer = hammer;
-        _saw = saw;
-    }
+    public Hammer Hammer { get; set; }
+    public Saw Saw { get; set; }
 
     public void BuildHouse()
     {
         //Builder depends on the hammer and the saw
-        // the client program or process is responsible for passing in
-        // the required dependencies trhoug the constructor
-        _saw.Use();
-        _hammer.Use();
+        // the client program or process is responsible for setting
+        // the required dependencies trhoug the builder setter methods
+        Saw.Use();
+        Hammer.Use();
         Console.WriteLine("House Built!");   
     }
 }
@@ -43,11 +36,14 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        // the user program or process is responsible for passing in
-        // the required dependencies trhoug the constructor
+        // the client program or process is responsible for setting
+        // the required dependencies trhoug the builder setter methods
         Hammer hammer = new Hammer();
         Saw saw = new Saw();    
-        Builder builder = new Builder(hammer, saw);
+        Builder builder = new Builder();
+        // We are injecting the dependencies via setters
+        builder.Hammer = hammer;//here and
+        builder.Saw = saw;//here
         builder.BuildHouse();
     }
 }
