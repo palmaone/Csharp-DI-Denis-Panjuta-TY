@@ -1,8 +1,14 @@
-﻿namespace Csharp_DI_Denis_Panjuta_TY;
+﻿namespace CsharpDIDenisPanjutaTY;
+
+public interface IToolUser
+{
+    void SetHammer(Hammer hammer);
+    void SetSaw(Saw saw);
+}
 
 public class Hammer
 {
-    public void Use() 
+    public void Use()
     {
         Console.WriteLine("Hammering Nails!");
     }
@@ -16,19 +22,29 @@ public class Saw
     }
 }
 
-public class Builder
+public class Builder : IToolUser
 {
-    public Hammer Hammer { get; set; }
-    public Saw Saw { get; set; }
+    private Hammer _hammer;
+    private Saw _saw;
 
     public void BuildHouse()
     {
         //Builder depends on the hammer and the saw
-        // the client program or process is responsible for setting
-        // the required dependencies trhoug the builder setter methods
-        Saw.Use();
-        Hammer.Use();
-        Console.WriteLine("House Built!");   
+        // Builder is an IToolUser and must implement
+        // setter methods to assing the Hammer and the Saw
+        _saw.Use();
+        _hammer.Use();
+        Console.WriteLine("House Built!");
+    }
+
+    public void SetHammer(Hammer hammer)
+    {
+        _hammer = hammer;
+    }
+
+    public void SetSaw(Saw saw)
+    {
+        _saw = saw;
     }
 }
 
@@ -39,12 +55,11 @@ internal class Program
         // the client program or process is responsible for setting
         // the required dependencies trhoug the builder setter methods
         Hammer hammer = new Hammer();
-        Saw saw = new Saw();    
+        Saw saw = new Saw();
         Builder builder = new Builder();
         // We are injecting the dependencies via setters
-        builder.Hammer = hammer;//here and
-        builder.Saw = saw;//here
+        builder.SetHammer(hammer);//here and
+        builder.SetSaw(saw);//here
         builder.BuildHouse();
     }
 }
-
